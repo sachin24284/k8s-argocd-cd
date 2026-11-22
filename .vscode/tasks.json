@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "00 check tools",            "type": "shell", "command": "./scripts/00-check-tools.sh" },
+    { "label": "01 build Argo CD image",    "type": "shell", "command": "./scripts/01-build-argocd-image.sh" },
+    { "label": "02 install Argo CD",        "type": "shell", "command": "./scripts/02-install-argocd.sh" },
+    { "label": "03 build hello-web 1.0.0",  "type": "shell", "command": "./scripts/03-build-app-image.sh 1.0.0" },
+    { "label": "05 dev loop (rebuild + redeploy Argo CD)", "type": "shell",
+      "command": "./scripts/05-dev-loop.sh ${input:tag}" },
+    { "label": "06 port-forward UI",        "type": "shell", "command": "./scripts/06-port-forward.sh", "isBackground": true },
+    { "label": "kubectl: all apps",         "type": "shell", "command": "kubectl get applications -n argocd" },
+    { "label": "99 cleanup",                "type": "shell", "command": "./scripts/99-cleanup.sh" }
+  ],
+  "inputs": [
+    { "id": "tag", "type": "promptString", "description": "New Argo CD image tag, e.g. 3.7.0-local2" }
+  ]
+}

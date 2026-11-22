@@ -1,0 +1,58 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hello-helm
+  namespace: argocd
+spec:
+  project: lab
+  source:
+    repoURL: https://github.com/sachin24284/k8s-argocd-cd.git
+    targetRevision: main
+    path: gitops-repo/charts/hello-helm
+    helm:
+      valuesObject:
+        replicaCount: 2
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: hello-helm
+  syncPolicy:
+    automated: { prune: true, selfHeal: true }
+    syncOptions: [CreateNamespace=true]
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hooks-demo
+  namespace: argocd
+spec:
+  project: lab
+  source:
+    repoURL: https://github.com/sachin24284/k8s-argocd-cd.git
+    targetRevision: main
+    path: gitops-repo/workloads/hooks-demo
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: hooks-demo
+  syncPolicy:
+    syncOptions: [CreateNamespace=true]
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: podinfo
+  namespace: argocd
+spec:
+  project: lab
+  source:
+    repoURL: https://stefanprodan.github.io/podinfo
+    chart: podinfo
+    targetRevision: 6.*
+    helm:
+      valuesObject:
+        replicaCount: 1
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: podinfo
+  syncPolicy:
+    automated: { prune: true, selfHeal: true }
+    syncOptions: [CreateNamespace=true]

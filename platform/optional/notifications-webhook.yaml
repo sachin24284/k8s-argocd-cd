@@ -1,0 +1,19 @@
+# OPTIONAL (Phase 12). Get a free URL from https://webhook.site, replace the url below, then:
+#   kubectl -n argocd patch cm argocd-notifications-cm --type merge --patch-file platform/optional/notifications-webhook.yaml
+# Subscribe an app:
+#   kubectl -n argocd annotate application hello-web-dev notifications.argoproj.io/subscribe.on-sync-ok.lab=""
+data:
+  service.webhook.lab: |
+    url: https://webhook.site/REPLACE-WITH-YOUR-ID
+    headers:
+      - name: Content-Type
+        value: application/json
+  template.sync-ok: |
+    webhook:
+      lab:
+        method: POST
+        body: |
+          {"app":"{{.app.metadata.name}}","phase":"{{.app.status.operationState.phase}}","revision":"{{.app.status.sync.revision}}"}
+  trigger.on-sync-ok: |
+    - when: app.status.operationState.phase in ['Succeeded']
+      send: [sync-ok]

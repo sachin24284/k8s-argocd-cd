@@ -1,0 +1,9 @@
+{
+  "files.eol": "\n",
+  "editor.formatOnSave": true,
+  "[yaml]": { "editor.tabSize": 2, "editor.insertSpaces": true },
+  "[shellscript]": { "files.eol": "\n" },
+  "yaml.schemas": {
+    "kubernetes": ["gitops-repo/workloads/**/*.yaml", "gitops-repo/bootstrap/*.yaml"]
+  }
+}

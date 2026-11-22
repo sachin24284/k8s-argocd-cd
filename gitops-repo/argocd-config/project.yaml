@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: lab
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  description: Lab project
+  sourceRepos:
+    - https://github.com/sachin24284/k8s-argocd-cd.git
+    - https://stefanprodan.github.io/podinfo
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: 'hello-*'
+    - server: https://kubernetes.default.svc
+      namespace: hooks-demo
+    - server: https://kubernetes.default.svc
+      namespace: podinfo
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace

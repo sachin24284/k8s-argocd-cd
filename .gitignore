@@ -1,0 +1,9 @@
+argo-cd-master/
+platform/argocd-install/install.yaml
+
+argo-cd-master/
+argo-cd-master.zip
+*.zip
+platform/argocd-install/install.yaml
+*.kubeconfig
+.env
