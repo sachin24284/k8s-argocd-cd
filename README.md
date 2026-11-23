@@ -19,6 +19,7 @@ A hands-on **GitOps** project: I built **Argo CD v3.7.0 from source**, deployed 
 - **ApplicationSet:** one template generates the **dev** and **prod** applications automatically.
 - **Environment overlays with Kustomize:** dev runs 1 replica, prod runs 2, from the same base manifests.
 - **Helm:** deploys a local chart and a public chart from a Helm repository.
+- **GitHub Actions CI/CD:** CI validates manifests and builds the app image; CD publishes it to GHCR and updates the dev overlay tag.
 - **Deployment control:** PreSync and PostSync **hooks** and **sync waves** for ordered rollouts.
 - **Self-healing and drift detection:** manual cluster changes are reverted automatically to match Git.
 - **Least privilege:** an AppProject limits allowed repositories and namespaces, and a read-only user is configured through RBAC.
@@ -28,12 +29,13 @@ A hands-on **GitOps** project: I built **Argo CD v3.7.0 from source**, deployed 
 
 ![Workflow](docs/images/workflow.svg)
 
-1. **Push:** I edit YAML in VS Code and push to GitHub.
-2. **Read:** Argo CD's repo server reads the repo and renders the manifests (Kustomize or Helm).
-3. **Apply:** the application controller compares Git with the cluster and syncs the difference.
-4. **Report:** live state is reported back, and drift is reverted when self-heal is on.
-5. **Images:** the Argo CD image and the demo app image are built locally with Docker and run in the cluster.
-6. **Observe:** the Argo CD web UI (`localhost:8080`) and `kubectl` show status, history and health.
+1. **Push:** I edit app code or YAML in VS Code and push to GitHub.
+2. **CI:** GitHub Actions validates Kustomize, Helm and YAML, then builds the demo image without pushing it.
+3. **CD:** on app source changes to `main`, GitHub Actions builds and pushes the image to GHCR, then commits the new tag to the dev overlay.
+4. **Read:** Argo CD's repo server reads the updated Git repository and renders manifests (Kustomize or Helm).
+5. **Apply:** the application controller compares Git with the cluster and syncs the difference.
+6. **Report:** live state is reported back, and drift is reverted when self-heal is on. Promote to prod by updating its overlay in Git.
+7. **Observe:** the Argo CD web UI (`localhost:8080`) and `kubectl` show status, history and health.
 
 ## Screenshots
 
@@ -100,7 +102,6 @@ kubectl get applications -n argocd
 
 ## Roadmap
 
-- [ ] CI pipeline with **GitHub Actions** (build the image, push to a registry, update the image tag in Git)
 - [ ] Test the read-only user and RBAC policies end to end
 - [ ] Add Sealed Secrets or External Secrets for secret management
 - [ ] Add monitoring with Prometheus metrics from Argo CD
