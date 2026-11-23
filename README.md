@@ -115,7 +115,3 @@ Argo CD is an open-source CNCF project. This repository uses an unmodified sourc
 ## Architecture
 
 ![Architecture](docs/images/architecture.svg)
-
-## How it works
-
-![Workflow](docs/images/workflow.svg)
