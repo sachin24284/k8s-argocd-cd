@@ -6,6 +6,7 @@
 ![Helm](https://img.shields.io/badge/Helm-charts-0F1689?logo=helm&logoColor=white)
 ![Kustomize](https://img.shields.io/badge/Kustomize-overlays-326CE5)
 ![GitOps](https://img.shields.io/badge/GitOps-Git%20as%20source%20of%20truth-success)
+![CI](https://github.com/sachin24284/k8s-argocd-cd/actions/workflows/ci.yaml/badge.svg)
 
 A hands-on **GitOps** project: I built **Argo CD v3.7.0 from source**, deployed it on a local **Kubernetes** cluster, and used it to deploy applications automatically from this Git repository. Every change goes through Git, and Argo CD keeps the cluster matching it.
 
@@ -115,3 +116,4 @@ Argo CD is an open-source CNCF project. This repository uses an unmodified sourc
 ## Architecture
 
 ![Architecture](docs/images/architecture.svg)
+
