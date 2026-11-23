@@ -111,3 +111,11 @@ GitHub: [@sachin24284](https://github.com/sachin24284)
 ---
 
 Argo CD is an open-source CNCF project. This repository uses an unmodified source snapshot to learn how it is built and deployed.
+
+## Architecture
+
+![Architecture](docs/images/architecture.svg)
+
+## How it works
+
+![Workflow](docs/images/workflow.svg)
