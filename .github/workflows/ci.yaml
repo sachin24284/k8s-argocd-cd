@@ -1,0 +1,30 @@
+name: CI
+on:
+    pull_request:
+    push:
+        branches: [main]
+        paths:
+            - "gitops-repo/**"
+            - "app-src/**"
+            - "platform/**"
+jobs:
+    validate:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Render the Kustomize overlays
+              run: |
+                  kubectl kustomize gitops-repo/workloads/hello-web/overlays/dev > /dev/null
+                  kubectl kustomize gitops-repo/workloads/hello-web/overlays/prod > /dev/null
+
+            - name: Lint the Helm chart
+              run: helm lint gitops-repo/charts/hello-helm
+
+            - name: Lint the YAML
+              run: |
+                  pip install --quiet yamllint
+                  yamllint -d '{extends: relaxed, rules: {line-length: disable}}' gitops-repo/argocd-config gitops-repo/bootstrap gitops-repo/workloads
+
+            - name: Build the demo image (no push)
+              run: docker build -t hello-web:ci app-src/hello-web
